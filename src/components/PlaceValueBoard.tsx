@@ -1,0 +1,7 @@
+import { useState } from 'react'
+import { quantity, type Blocks } from '../regrouping'
+
+export function PlaceValueBoard({ blocks, reveal = true }: { blocks: Blocks; reveal?: boolean }) {
+  const [inspected, setInspected] = useState<number | null>(null)
+  return <div className="place-value"><div className="place-columns"><section className="tens-column"><h3>十 <small>{blocks.tens} 包</small></h3><div className="bundles">{Array.from({ length: blocks.tens }, (_, index) => <button className="ten-bundle" key={index} aria-label={`第 ${index + 1} 包，十粒`} aria-expanded={inspected === index} onClick={() => setInspected(inspected === index ? null : index)}>{Array.from({ length: 10 }, (_, unit) => <span key={unit} />)}</button>)}</div></section><section className="ones-column"><h3>一 <small>{blocks.ones} 粒</small></h3><div className="loose-units">{Array.from({ length: blocks.ones }, (_, index) => <span className="unit" key={index} aria-label="一粒積木" />)}</div></section></div>{inspected !== null && inspected < blocks.tens && <div className="bundle-inspection"><span>一包十粒</span><div className="inspected-units">{Array.from({ length: 10 }, (_, index) => <span className="unit" key={index} />)}</div></div>}<div className="quantity-ledger" aria-live="polite">一共有 <strong data-testid="quantity-value">{reveal ? quantity(blocks) : '?'}</strong> 粒</div></div>
+}
